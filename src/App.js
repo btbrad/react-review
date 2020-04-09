@@ -14,7 +14,24 @@ import Radio from './components/radio'
 import StateHook from './components/StateHook'
 import ContextType from './components/ContextTest'
 import MyForm from './components/myForm'
+import {increment, decrement} from './store/actions'
+import { connect } from 'react-redux'
 
+const mapStateToProps = state => ({
+  num: state
+})
+
+const mapDispatchToProps = dispatch => ({
+  increment: () => dispatch(increment()),
+  decrement: () => dispatch(decrement()),
+  asyncIncrement: () =>{
+    setTimeout(() => {
+      dispatch(increment())
+    }, 1500);
+  } 
+})
+
+@connect(mapStateToProps, mapDispatchToProps)
 class App extends Component {
 
   state = {
@@ -55,6 +72,12 @@ class App extends Component {
       <ContextType />
       <hr/>
       <MyForm />
+      <p>count: {this.props.num}</p>
+      <div>
+        <button onClick={this.props.decrement}>-</button>
+        <button onClick={this.props.increment}>+</button>
+        <button onClick={this.props.asyncIncrement}>async+</button>
+      </div>
     </div>
   }
 }
