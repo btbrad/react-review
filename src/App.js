@@ -14,22 +14,19 @@ import Radio from './components/radio'
 import StateHook from './components/StateHook'
 import ContextType from './components/ContextTest'
 import MyForm from './components/myForm'
-import {increment, decrement} from './store/actions'
+import {increment, decrement, asyncIncrement} from './store/counter.redux'
 import { connect } from 'react-redux'
+import RouterSample from './components/routerSample'
 
 const mapStateToProps = state => ({
-  num: state
+  num: state.counter
 })
 
-const mapDispatchToProps = dispatch => ({
-  increment: () => dispatch(increment()),
-  decrement: () => dispatch(decrement()),
-  asyncIncrement: () =>{
-    setTimeout(() => {
-      dispatch(increment())
-    }, 1500);
-  } 
-})
+const mapDispatchToProps = {
+  increment,
+  decrement,
+  asyncIncrement
+}
 
 @connect(mapStateToProps, mapDispatchToProps)
 class App extends Component {
@@ -78,6 +75,7 @@ class App extends Component {
         <button onClick={this.props.increment}>+</button>
         <button onClick={this.props.asyncIncrement}>async+</button>
       </div>
+      <RouterSample></RouterSample>
     </div>
   }
 }
