@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { BrowserRouter, Link, Route, Switch, Redirect } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { login } from '../store/user.redux'
@@ -68,14 +68,16 @@ const PrivateRoute = connect(
 const Login = connect(
   state => ({
     isLogin: state.user.isLogin,
-    loading: state.user.loading
+    loading: state.user.loading,
+    error: state.user.error
   }),
-  dispatch => ({
-    login: () => dispatch(login())
-  })
+  {
+    login: login
+  }
 )(
-  ({location, isLogin, login, loading}) =>  {
+  ({location, isLogin, login, loading, error}) =>  {
     const redirect = location.state.redirect || '/'
+    const [uname, setUname] = useState('')
   
     if (isLogin) {
       return <Redirect to={redirect}/>
@@ -85,7 +87,9 @@ const Login = connect(
       <div>
         <p>用户登录</p>
         <hr/>
-        <button onClick={login} disabled={loading}>{loading ? '登录中' : '登录' }</button>
+        {error && <p style={{color: '#f40'}}>{error}</p>}
+        <input type="text" value={uname} onChange={e => setUname(e.target.value)} />
+        <button onClick={()=>login(uname)} disabled={loading}>{loading ? '登录中...' : '登录' }</button>
       </div>
     )
   }

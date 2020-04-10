@@ -1,6 +1,7 @@
 const initialState = {
   isLogin: false,
-  loading: false
+  loading: false,
+  error: ''
 }
 
 
@@ -9,21 +10,33 @@ export const userReducer = (state = initialState, action) => {
     case 'requestLogin': 
       return {
         isLogin: false,
-        loading: true
+        loading: true,
+        error: ''
       }
-    case 'login': 
+    case 'loginSuccess': 
       return {
         isLogin: true,
-        loading: false
+        loading: false,
+        error: ''
+      }
+    case 'loginFailure': 
+      return {
+        isLogin: false,
+        loading: false,
+        error: action.message
       }
     default: 
       return state
   }
 }
 
-export const login = () => dispatch => {
-    dispatch({type: 'requestLogin'})
-    setTimeout(() => {
-      dispatch({type: 'login'})
-    }, 2000);
+// export const login = () => dispatch => {
+//     dispatch({type: 'requestLogin'})
+//     setTimeout(() => {
+//       dispatch({type: 'login'})
+//     }, 2000);
+// }
+
+export function login(uname) {
+  return {type: 'login', uname}
 }
